@@ -1,5 +1,5 @@
 // // ipResolver.js
-const axios = require('axios');
+// const axios = require('axios');
 const ping = require('ping');
 const { promisify } = require('util');
 const logger = require('./logger');
@@ -7,6 +7,7 @@ const { PING_TIMEOUT, MAX_ATTEMPTS, CONCURRENT_REQUESTS } = require('../config/c
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+/* 
 async function getIpFromApi(amazonUrl, headers) {
     try {
         const response = await axios.get(`http://ip-api.com/json/${amazonUrl}?lang=zh-CN`, {
@@ -15,6 +16,27 @@ async function getIpFromApi(amazonUrl, headers) {
         });
         const data = response.data;
         if (data.status === 'success' && data.query.match(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/)) {
+            return data.query;
+        } else {
+            logger.info(`Skipped IP from API for ${amazonUrl}: No valid IP or status not success.`);
+        }
+    } catch (error) {
+        logger.error(`Error querying ${amazonUrl} from API: ${error.message}`);
+        throw error;
+    }
+    return null;
+}
+*/
+
+async function getIpFromApi(amazonUrl, headers) {
+    try {
+        const response = await fetch(`http://ip-api.com/json/${amazonUrl}?lang=zh-CN`, {
+            method: 'GET',
+            headers,
+            timeout: PING_TIMEOUT,
+        });
+        const data = await response.json(); // 使用 json() 方法解析 JSON 响应
+        if (response.ok && data.status === 'success' && data.query.match(/\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/)) {
             return data.query;
         } else {
             logger.info(`Skipped IP from API for ${amazonUrl}: No valid IP or status not success.`);
