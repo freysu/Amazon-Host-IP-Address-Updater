@@ -5,8 +5,8 @@ const logger = require('./logger');
 const SCRIPT_DIR = __dirname;
 const README_PATH = path.join(SCRIPT_DIR, '../README.md');
 const README_TEMPLATE_PATH = path.join(SCRIPT_DIR, '../README_template.md');
-const HOSTS_PATH = path.join(SCRIPT_DIR, '../dist/hosts');
-const HOSTS_JSON_PATH = path.join(SCRIPT_DIR, '../dist/hosts.json');
+const HOSTS_PATH = path.join(SCRIPT_DIR, '../output/hosts');
+const HOSTS_JSON_PATH = path.join(SCRIPT_DIR, '../output/hosts.json');
 
 async function writeReadmeFile(hostsContent, updateTime) {
     const outputDocFilePath = README_PATH;
