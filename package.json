@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +23,9 @@
       "README.md",
       "error.log"
     ]
-  }
+  },
+  "engines": {
+    "node": ">=18.17.1"
+  },
+  "packageManager": "pnpm@8.12.1+sha256.28ca61ece5a496148b73fabc9afb820f9c3fec4f55f04ce45a2cea0a5219f2e1"
 }
