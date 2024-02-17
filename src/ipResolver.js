@@ -4,7 +4,11 @@ const ping = require('ping');
 const { promisify } = require('util');
 const logger = require('./logger');
 const { PING_TIMEOUT, MAX_ATTEMPTS, CONCURRENT_REQUESTS } = require('../config/config');
-
+const Header = {
+  "User-Agent":"Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.23.184.0 Mobile Safari/537.36 Edge/18.18362 SearchCraft/2.8.2 Baidu;P1 10.0",
+  'Accept-Encoding': 'gzip',
+  'Content-Type': 'application/json'
+}
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 /* 
@@ -32,7 +36,9 @@ async function getIpFromApi(amazonUrl, headers) {
     try {
         const response = await fetch(`http://ip-api.com/json/${amazonUrl}?lang=zh-CN`, {
             method: 'GET',
-            headers,
+            headers: Object.assign({
+      'Content-Type': 'application/json; charset=utf-8',
+    }, Headers),
             timeout: PING_TIMEOUT,
         });
         const data = await response.json(); // 使用 json() 方法解析 JSON 响应
