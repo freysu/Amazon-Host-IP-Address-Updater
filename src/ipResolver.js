@@ -5,9 +5,9 @@ const { promisify } = require('util');
 const logger = require('./logger');
 const { PING_TIMEOUT, MAX_ATTEMPTS, CONCURRENT_REQUESTS } = require('../config/config');
 const Header = {
-  "User-Agent":"Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.23.184.0 Mobile Safari/537.36 Edge/18.18362 SearchCraft/2.8.2 Baidu;P1 10.0",
-  'Accept-Encoding': 'gzip',
-  'Content-Type': 'application/json'
+    "User-Agent": "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.23.184.0 Mobile Safari/537.36 Edge/18.18362 SearchCraft/2.8.2 Baidu;P1 10.0",
+    'Accept-Encoding': 'gzip',
+    'Content-Type': 'application/json'
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -37,8 +37,8 @@ async function getIpFromApi(amazonUrl, headers) {
         const response = await fetch(`http://ip-api.com/json/${amazonUrl}?lang=zh-CN`, {
             method: 'GET',
             headers: Object.assign({
-      'Content-Type': 'application/json; charset=utf-8',
-    }, Headers),
+                'Content-Type': 'application/json; charset=utf-8',
+            }, Headers),
             timeout: PING_TIMEOUT,
         });
         const data = await response.json(); // 使用 json() 方法解析 JSON 响应
@@ -126,10 +126,14 @@ async function processUrls(amazon_urls, verbose) {
     const promises = amazon_urls.map(async (url) => {
         return processUrlWithRetry(url, verbose);
     });
-    // logger.info(promises)
-    const results = await Promise.all(promises);
-    // logger.info(results)
-    return results
+
+    try {
+        const results = await Promise.allSettled(promises);
+        return results.filter(result => result.status === 'fulfilled').map(result => result.value);
+    } catch (error) {
+        logger.error(`Failed to process all URLs: ${error.message}`);
+        throw error;
+    }
 }
 
 module.exports = {

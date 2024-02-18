@@ -29,6 +29,10 @@ async function main(verbose = false) {
       return `${ip}${padding}${url}`;
     })
     .join('\n');
+    logger.warn(JSON.stringify(content));
+    logger.warn(!Array.isArray(contentList))
+    logger.warn(JSON.stringify(contentList));
+
 
   const update_time = new Date().toISOString();
 
@@ -38,7 +42,7 @@ async function main(verbose = false) {
       await writeJsonFile(contentList);
     }
   } catch (error) {
-    logger.error('Error writing files:', error);
+    logger.error(error.message);
     return; // Terminate execution upon encountering an error
   }
 
